@@ -65,7 +65,7 @@ A Retrieval-Augmented Generation (RAG) system that provides intelligent access t
 2. Install Ollama and pull the Qwen model:
    ```bash
    # Install Ollama from https://ollama.ai/
-   ollama pull qwen:1b
+   ollama pull qwen:0.5b
    ```
 
 3. Initialize the database and fetch initial documents:
