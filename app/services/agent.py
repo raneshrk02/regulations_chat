@@ -42,10 +42,10 @@ RESPONSE STRUCTURE FOR OTHER QUERIES:
 4. Citations: List all referenced documents at the end using [Document Number]
 
 EXAMPLES:
-❌ Bad Response:
+Bad Response:
 "You can search for recent documents in various ways..."
 
-✅ Good Response:
+Good Response:
 "Here are the most recent documents in the database:
 
 1. Publication Date: 2024-03-15
@@ -154,7 +154,7 @@ class Agent:
             
             if is_recent_query:
                 # Use get_recent_documents for recent document queries
-                documents = await self.get_recent_documents(days=30)  # Get last 30 days
+                documents = await self.get_recent_documents(days=30)  
                 logger.info(f"Recent documents query - Found {len(documents)} documents")
             else:
                 # Use regular search for other queries
@@ -165,7 +165,6 @@ class Agent:
             for doc in documents:
                 logger.info(f"Document: {doc['title']} ({doc['document_number']}) - {doc['publication_date']}")
             
-            # Prepare document context
             doc_context = ""
             if documents:
                 doc_context = "\nAvailable documents:\n"
@@ -203,7 +202,6 @@ class Agent:
                 async with session.post(settings.OLLAMA_API_URL, json=payload) as response:
                     if response.status == 200:
                         result = await response.json()
-                        # Clean the response text
                         cleaned_response = self._clean_text(result.get('response', ''))
                         return {
                             'response': cleaned_response,
@@ -232,19 +230,7 @@ class Agent:
         """Clean text to ensure only standard English characters are used."""
         if not text:
             return ""
-        
-        # Replace common problematic characters
-        replacements = {
-            '疾病': 'Disease',
-            '控制': 'Control',
-            '预防': 'Prevention',
-            # Add more replacements as needed
-        }
-        
-        cleaned = text
-        for old, new in replacements.items():
-            cleaned = cleaned.replace(old, new)
-            
-        # Remove any remaining non-ASCII characters
-        cleaned = ''.join(char for char in cleaned if ord(char) < 128)
-        return cleaned.strip() 
+                    
+        # Remove any non-ASCII characters
+        cleaned = ''.join(char for char in text if ord(char) < 128)
+        return cleaned.strip()

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 import logging
 from ..core.config import get_settings
 from ..core.database import init_db, get_db
-import dateutil.parser  # Add this import
+import dateutil.parser  
 
 settings = get_settings()
 logging.basicConfig(level=logging.INFO)
@@ -132,5 +132,4 @@ async def run_pipeline(days: int = 7):
         logger.error(f"Pipeline error: {str(e)}")
 
 if __name__ == "__main__":
-    # Run for 120 days (approximately 4 months)
     asyncio.run(run_pipeline(120)) 

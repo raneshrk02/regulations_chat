@@ -30,7 +30,7 @@ async def init_db():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     FULLTEXT KEY doc_search_idx (title, abstract, full_text)
-                ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+                ) 
             """)
             await conn.commit()
 
@@ -72,14 +72,7 @@ async def get_recent_documents(limit: int = 10):
     async with get_db() as cur:
         await cur.execute("""
             SELECT 
-                id,
-                title,
-                document_number,
-                document_type,
-                publication_date,
-                abstract,
-                agencies,
-                created_at
+                id, title, document_number, document_type, publication_date, abstract, agencies, created_at
             FROM documents 
             ORDER BY created_at DESC
             LIMIT %s
